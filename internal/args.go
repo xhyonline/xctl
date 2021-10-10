@@ -56,7 +56,7 @@ func (s *Args) getComponent() (register, server string) {
 	if len(registerComponent) == 0 {
 		return "", ""
 	}
-	return strings.Join(registerComponent, ","), strings.TrimRight(server,"\n")
+	return "," + strings.Join(registerComponent, ","), strings.TrimRight(server, "\n")
 }
 
 // createFile 递归拷贝模板,并且格式化创建 Go 创建文件
