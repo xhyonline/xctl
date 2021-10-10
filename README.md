@@ -7,7 +7,7 @@ Go 1.16 以上
 
 ## 安装命令
 
-`go install github.com/xhyonline/xctl`
+`go install github.com/xhyonline/xctl@latest`
 
 ## 创建 HTTP 服务项目
 
