@@ -65,6 +65,9 @@ func (s *Args) createFile(tplPath, filePath string) {
 	for _, item := range d {
 		createPath := filePath + "/" + item.Name()
 		tpl := tplPath + "/" + item.Name()
+		if s.skipCreateFile(createPath) {
+			continue
+		}
 		if item.IsDir() {
 			_ = os.MkdirAll(createPath, 777)
 			s.createFile(tpl, createPath)
@@ -82,4 +85,19 @@ func (s *Args) createFile(tplPath, filePath string) {
 		input := s.replaceContentByTag(string(body))
 		_ = helper.FilePutContents(createPath, input, helper.ContentCover)
 	}
+}
+
+// skipCreateFile 是否跳过该文件的创建
+func (s *Args) skipCreateFile(path string) bool {
+	if !s.WithMySQL && helper.InArray(path, []string{
+		currentPath + "/" + "component/mysql.tpl",
+	}) {
+		return true
+	}
+	if !s.WithRedis && helper.InArray(path, []string{
+		currentPath + "/" + "component/redis.tpl",
+	}) {
+		return true
+	}
+	return false
 }
