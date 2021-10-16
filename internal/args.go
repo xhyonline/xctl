@@ -103,7 +103,7 @@ func (s *Args) skipCreateFile(path string) bool {
 		return true
 	}
 	if !s.WithGithubAction && helper.InArray(path, []string{
-		currentPath + ".github",
+		currentPath + "/.github",
 	}) {
 		return true
 	}
