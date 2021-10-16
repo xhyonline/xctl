@@ -11,7 +11,7 @@ var args = new(internal.Args)
 func initArgs() {
 	createCmd.Flags().StringVar(&args.AppName, "with-name", "", "必填项 应用名称,例如:myapp,")
 	createCmd.Flags().StringVar(&args.Mod, "with-mod", "", "必填项 初始化 go mod 例如: github.com/myapp")
-	createCmd.Flags().BoolVar(&args.WithHTTPServer, "with-http-server", true, "是否是一个 HTTP 服务? 默认是")
+	//createCmd.Flags().BoolVar(&args.WithHTTPServer, "with-http-server", true, "是否是一个 HTTP 服务? 默认是")
 	createCmd.Flags().BoolVar(&args.WithMySQL, "with-mysql", false, "是否使用 mysql 数据库")
 	createCmd.Flags().BoolVar(&args.WithRedis, "with-redis", false, "是否使用 redis 缓存")
 	createCmd.Flags().BoolVar(&args.WithGithubAction, "with-githubAction", false, "是否初始化 github action 集成")
