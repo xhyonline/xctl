@@ -3,8 +3,7 @@ package component
 import (
 	"sync"
 
-	"github.com/xhyonline/xutil/kv"
-	"gorm.io/gorm"
+    %componentImport
 )
 
 // Server 组件服务

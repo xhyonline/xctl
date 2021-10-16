@@ -16,12 +16,13 @@ type Args struct {
 
 // replaceContentByTag 通过标签更换内容
 func (s *Args) replaceContentByTag(input string) string {
-	register, server := s.getComponent()
+	register, server, imports := s.getComponent()
 	var label = map[string]string{
 		"%goMod":             s.Mod,
 		"%configs":           s.getWithConfig(),
 		"%componentRegister": register,
 		"%componentSever":    server,
+		"%componentImport":   imports,
 	}
 	for k, v := range label {
 		input = strings.ReplaceAll(input, k, v)
@@ -43,20 +44,22 @@ func (s *Args) getWithConfig() string {
 	return strings.Join(tmp, ",")
 }
 
-func (s *Args) getComponent() (register, server string) {
+func (s *Args) getComponent() (register, server, imports string) {
 	var registerComponent = make([]string, 0)
 	if s.WithMySQL {
 		registerComponent = append(registerComponent, "RegisterMySQL()")
 		server += "MySQL *gorm.DB\n"
+		imports += "gorm.io/gorm\n"
 	}
 	if s.WithRedis {
 		registerComponent = append(registerComponent, "RegisterRedis()")
 		server += "Redis *kv.RClient\n"
+		imports += "github.com/xhyonline/xutil/kv\n"
 	}
 	if len(registerComponent) == 0 {
-		return "", ""
+		return "", "", ""
 	}
-	return "," + strings.Join(registerComponent, ","), strings.TrimRight(server, "\n")
+	return "," + strings.Join(registerComponent, ","), strings.TrimRight(server, "\n"), imports
 }
 
 // createFile 递归拷贝模板,并且格式化创建 Go 创建文件
