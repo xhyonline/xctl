@@ -49,12 +49,12 @@ func (s *Args) getComponent() (register, server, imports string) {
 	if s.WithMySQL {
 		registerComponent = append(registerComponent, "RegisterMySQL()")
 		server += "MySQL *gorm.DB\n"
-		imports += `"gorm.io/gorm"`+"\n"
+		imports += `"gorm.io/gorm"` + "\n"
 	}
 	if s.WithRedis {
 		registerComponent = append(registerComponent, "RegisterRedis()")
 		server += "Redis *kv.RClient\n"
-		imports += `"github.com/xhyonline/xutil/kv"`+"\n"
+		imports += `"github.com/xhyonline/xutil/kv"` + "\n"
 	}
 	if len(registerComponent) == 0 {
 		return "", "", ""
@@ -93,12 +93,17 @@ func (s *Args) createFile(tplPath, filePath string) {
 // skipCreateFile 是否跳过该文件的创建
 func (s *Args) skipCreateFile(path string) bool {
 	if !s.WithMySQL && helper.InArray(path, []string{
-		currentPath + "/" + "component/mysql.tpl",
+		currentPath + "/component/mysql.tpl",
 	}) {
 		return true
 	}
 	if !s.WithRedis && helper.InArray(path, []string{
-		currentPath + "/" + "component/redis.tpl",
+		currentPath + "/component/redis.tpl",
+	}) {
+		return true
+	}
+	if !s.WithGithubAction && helper.InArray(path, []string{
+		currentPath + ".github",
 	}) {
 		return true
 	}

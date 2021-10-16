@@ -1,0 +1,72 @@
+name: CI构建
+on:
+  push:
+    branches: [ main,master ]
+  pull_request:
+    branches: [ main ,master ] # merge到main分支时触发部署
+
+env:
+  APP_NAME: x-http # 给 APP 起一个名字
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@master
+
+      - name: 设置环境 Golang 环境
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: 代码质量检测
+        uses: golangci/golangci-lint-action@v2
+        with:
+          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
+          version: v1.29
+
+      - name: 构建 BuiLd
+        run: |
+          export GOPROXY=https://goproxy.io,direct
+          go build -o app
+
+      - name: upx 压缩二进制文件
+        uses: crazy-max/ghaction-upx@v1
+        with:
+          version: latest
+          files: |
+            app
+          args: -fq
+
+      - name: 同步文件
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: ./app
+          remote_path: /micro-server/$APP_NAME # 发布到远程主机,当然你需要自己创建 /micro-server 目录 $APP_NAME 是全局的变量
+          remote_host: ${{ secrets.Host }}
+          remote_port: 22
+          remote_user: root
+          remote_key: ${{ secrets.DeploySecret }} # 请使用 ssh-keygen -t rsa 生成秘钥对,然后将公钥拷贝到要操纵的目标器的/root/.ssh/authorized_keys里,再把私钥黏贴到 github 后台的secret里
+
+      - name: 执行重启命令
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.Host }}
+          username: root
+          key: ${{ secrets.DeploySecret }}
+          port: 22
+          script: | # 请自行在这里执行应用的重启命令
+            pwd
+            ls /micro-server
+
+      - name: 构建结果通知
+        uses: zzzze/webhook-trigger@master
+        if: always()
+        with:
+          data: "{'event_type':'build-result','status':'${{ job.status }}',
+          'repository':'${{ github.repository }}','job':'${{ github.job }}',
+          'workflow':'${{ github.workflow }}'}"
+          webhook_url: ${{ secrets.WebHookURL }}
+          options: "-H \"Accept: application/vnd.github.everest-preview+json\" -H \"Authorization: token ${{ secrets.TOKEN }}\""
