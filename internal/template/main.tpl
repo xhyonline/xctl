@@ -21,7 +21,7 @@ func main() {
 	// 初始化配置
 	configs.Init(%configs)
 	// 初始化 mysql 、redis 等服务组件
-	ComponentInit(RegisterLogger()%componentRegister)
+	Init(RegisterLogger()%componentRegister)
 	// 中间件
 	g.Use(middleware.Cors())
 	// 初始化路由

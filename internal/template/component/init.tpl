@@ -3,7 +3,7 @@ package component
 import (
 	"sync"
 
-    %componentImport
+	%componentImport
 )
 
 // Server 组件服务
@@ -18,8 +18,8 @@ var (
 
 type Option func()
 
-// ComponentInit 初始化组建服务
-func ComponentInit(options ...Option) {
+// Init 初始化组建服务
+func Init(options ...Option) {
 	once.Do(func() {
 		Instance = new(Server)
 		for _, f := range options {
