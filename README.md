@@ -9,7 +9,7 @@ xctl 是一款 `Golang` 轻量级命令行代码生成器
 
 ## 安装命令
 
-`go install github.com/xhyonline/xctl@latest`
+`go install github.com/xhyonline/xctl@v0.1.20211017`
 
 ## Golang 版本要求
 
