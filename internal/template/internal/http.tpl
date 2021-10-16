@@ -2,9 +2,11 @@ package internal
 
 import (
 	"context"
-	. "%goMod/component" // 忽略包名
 	"net/http"
 	"os"
+
+	// nolint
+	. "%goMod/component" // 忽略包名
 )
 
 type HTTPServer struct {
@@ -13,7 +15,7 @@ type HTTPServer struct {
 
 func (s *HTTPServer) GracefulClose() {
 	if err := s.Shutdown(context.Background()); err != nil {
-		Logger.Error("HTTP 服务优雅退出失败", err)
+		Logger.Errorf("HTTP 服务优雅退出失败 %s", err)
 	}
 	Logger.Info("HTTP 服务已优雅退出")
 }
@@ -22,7 +24,7 @@ func (s *HTTPServer) GracefulClose() {
 func (s *HTTPServer) Run() {
 	Logger.Info("HTTP 服务成功启动")
 	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		Logger.Error("HTTP 服务启动出错", err)
+		Logger.Errorf("HTTP 服务启动出错 %s", err)
 		os.Exit(1)
 	}
 }

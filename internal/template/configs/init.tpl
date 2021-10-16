@@ -9,7 +9,7 @@ import (
 	"github.com/xhyonline/xutil/helper"
 )
 
-// 当前环境
+// Env 当前环境
 var Env = "dev"
 
 type Config struct {

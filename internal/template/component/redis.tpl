@@ -1,8 +1,9 @@
 package component
 
 import (
-	"%goMod/configs"
 	"strconv"
+
+	"%goMod/configs"
 
 	"github.com/xhyonline/xutil/kv"
 )

@@ -1,14 +1,16 @@
 package main
 
 import (
+	"net/http"
+
 	"%goMod/configs"
 	"%goMod/internal"
 	"%goMod/middleware"
 	"%goMod/router"
-	"net/http"
 
 	"github.com/xhyonline/xutil/sig"
 
+	// nolint
 	. "%goMod/component" // 忽略包名
 
 	"github.com/gin-gonic/gin"
