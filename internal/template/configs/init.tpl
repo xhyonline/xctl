@@ -1,9 +1,9 @@
 package configs
 
 import (
-	"fmt"
 	"io/ioutil"
-	"os"
+
+	"github.com/xhyonline/xutil/logger"
 
 	"github.com/BurntSushi/toml"
 	"github.com/xhyonline/xutil/helper"
@@ -12,9 +12,13 @@ import (
 // Env 当前环境
 var Env = "dev"
 
+// Name 服务名
+var Name = "%appName"
+
 type Config struct {
 	MySQL *MySQL `toml:"mysql"`
 	Redis *Redis `toml:"redis"`
+	ETCD  *ETCD  `toml:"etcd"`
 }
 
 type Redis struct {
@@ -25,6 +29,11 @@ type Redis struct {
 type MySQL struct {
 	dbCommon
 	DB string `toml:"db"`
+}
+
+type ETCD struct {
+	Host string `toml:"host"`
+	Port int    `toml:"port"`
 }
 
 type dbCommon struct {
@@ -39,6 +48,7 @@ type dbCommon struct {
 var Instance = &Config{
 	Redis: new(Redis),
 	MySQL: new(MySQL),
+	ETCD:  new(ETCD),
 }
 
 type Option func() string
@@ -51,6 +61,7 @@ const (
 	productConfigPath = "/usr/local/go-micro/common/"
 )
 
+
 // Init 初始化配置文件信息
 func Init(options ...Option) {
 	// 判断生产环境的配置文件是否存在,如果存在优先读取
@@ -58,6 +69,7 @@ func Init(options ...Option) {
 	if exists {
 		Env = "product"
 		filePath = productConfigPath
+		logger.SetLoggerProduct("/tmp/log/go-micro/" + Name + ".log")
 	}
 	for _, v := range options {
 		load(v)
@@ -69,8 +81,7 @@ func load(option Option) {
 	if exists, _ := helper.PathExists(option()); exists {
 		body, _ := ioutil.ReadFile(option())
 		if _, err := toml.Decode(string(body), Instance); err != nil {
-			fmt.Println("配置文件加载失败")
-			os.Exit(0)
+			logger.Fatalf("配置文件加载失败 %s", err)
 		}
 	}
 }
@@ -84,5 +95,11 @@ func WithMySQL() Option {
 func WithRedis() Option {
 	return func() string {
 		return filePath + "redis.toml"
+	}
+}
+
+func WithETCD() Option {
+	return func() string {
+		return filePath + "etcd.toml"
 	}
 }

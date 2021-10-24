@@ -2,11 +2,8 @@ package internal
 
 import (
 	"context"
+	"github.com/xhyonline/xutil/logger"
 	"net/http"
-	"os"
-
-	// nolint
-	. "%goMod/component" // 忽略包名
 )
 
 type HTTPServer struct {
@@ -15,16 +12,16 @@ type HTTPServer struct {
 
 func (s *HTTPServer) GracefulClose() {
 	if err := s.Shutdown(context.Background()); err != nil {
-		Logger.Errorf("HTTP 服务优雅退出失败 %s", err)
+		logger.Errorf("HTTP 服务优雅退出失败 %s", err)
+		return
 	}
-	Logger.Info("HTTP 服务已优雅退出")
+	logger.Info("HTTP 服务已优雅退出")
 }
 
 // Run 启动
 func (s *HTTPServer) Run() {
-	Logger.Info("HTTP 服务成功启动")
+	logger.Info("HTTP 服务成功启动")
 	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		Logger.Errorf("HTTP 服务启动出错 %s", err)
-		os.Exit(1)
+		logger.Fatalf("HTTP 服务启动出错 %s", err)
 	}
 }
