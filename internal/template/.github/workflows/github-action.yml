@@ -20,7 +20,14 @@ jobs:
         with:
           go-version: 1.17
 
-      - name: 代码质量检测
+      - name: 设置私有仓库和GoProxy
+        run: |
+          export GOPROXY=https://goproxy.io,direct
+#         如果你有 github 的私有库,请自行设置 GOPRIVATE 示例如下,注下面的 UserName 是用户名,例如:xhyonline,而不是你登录 Github 的邮箱
+#          git config --global url."https://${{ secret.UserName }}:${{secret.Token}}@github.com".insteadOf  "https://github.com"
+#          export GOPRIVATE=github.com/xhyonline
+
+      - name: CI-lint 代码质量检测
         uses: golangci/golangci-lint-action@v2
         with:
           # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
@@ -28,7 +35,6 @@ jobs:
 
       - name: 构建 BuiLd
         run: |
-          export GOPROXY=https://goproxy.io,direct
           go build -o app
 
       - name: upx 压缩二进制文件
@@ -57,13 +63,13 @@ jobs:
           username: root
           key: ${{ secrets.DeploySecret }}
           port: 22
-          script: | # 请自行在这里执行应用的重启命令
+          script: | # 请自行在这里执行应用的重启命令,这里我没重启,只是查看了下构建的结果
             pwd
             ls /micro-server
 
       - name: 构建结果通知
         uses: zzzze/webhook-trigger@master
-        if: always()
+        if: always() # 失败成功总会发送
         with:
           data: "{'event_type':'build-result','status':'${{ job.status }}',
           'repository':'${{ github.repository }}','job':'${{ github.job }}',
