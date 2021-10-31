@@ -7,12 +7,13 @@ import (
 	"github.com/xhyonline/xctl/internal"
 )
 
-var args = new(internal.Args)
+var args = new(internal.CreateArgs)
 
 func initArgs() {
 	createCmd.Flags().StringVar(&args.AppName, "with-name", "", "必填项 应用名称,例如:myapp,")
 	createCmd.Flags().StringVar(&args.Mod, "with-mod", "", "必填项 初始化 go mod 例如: github.com/myapp")
-	createCmd.Flags().BoolVar(&args.WithHTTPServer, "with-http-server", false, "二选一或全选(全选则附带grpc-server附带GRPC Client 说明文档 rpc 目录下) 必填项 是否是一个 HTTP 服务?")
+	createCmd.Flags().BoolVar(&args.WithHTTPServer, "with-http-server", false,
+		"二选一或全选(全选则附带grpc-server附带GRPC Client 说明文档 rpc 目录下) 必填项 是否是一个 HTTP 服务?")
 	createCmd.Flags().BoolVar(&args.WithGRPCServer, "with-grpc-server", false, "二选一 必填项 是否是一个 GRPC 服务?")
 	createCmd.Flags().BoolVar(&args.WithMySQL, "with-mysql", false, "是否使用 mysql 数据库")
 	createCmd.Flags().BoolVar(&args.WithRedis, "with-redis", false, "是否使用 redis 缓存")
