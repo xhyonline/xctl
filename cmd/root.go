@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 // 跟命令
@@ -15,14 +16,14 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-func init()  {
-	rootCmd.AddCommand(createCmd)
+func init() {
+	rootCmd.AddCommand(createCmd, protoCmd)
 }
 
 func Execute() {
 	initArgs()
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println("出错了", err)
+		fmt.Printf("出错了 %s\n", err)
 		os.Exit(1)
 	}
 }

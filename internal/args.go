@@ -8,15 +8,16 @@ import (
 	"github.com/xhyonline/xutil/helper"
 )
 
-// Args 接收参数
-type Args struct {
+// CreateArgs 接收参数
+type CreateArgs struct {
 	WithMySQL, WithRedis, WithEtcd,
-	WithGithubAction, WithHTTPServer, WithGRPCServer bool
+	WithGithubAction, WithHTTPServer,
+	WithGRPCServer bool
 	AppName, Mod string
 }
 
 // replaceContentByTag 通过标签更换内容
-func (s *Args) replaceContentByTag(input string) string {
+func (s *CreateArgs) replaceContentByTag(input string) string {
 	register, server, imports := s.getComponent()
 	var label = map[string]string{
 		"%goMod":             s.Mod,
@@ -32,7 +33,7 @@ func (s *Args) replaceContentByTag(input string) string {
 	return input
 }
 
-func (s *Args) getWithConfig() string {
+func (s *CreateArgs) getWithConfig() string {
 	var tmp = make([]string, 0)
 	if s.WithMySQL {
 		tmp = append(tmp, "configs.WithMySQL()")
@@ -49,7 +50,7 @@ func (s *Args) getWithConfig() string {
 	return strings.Join(tmp, ",")
 }
 
-func (s *Args) getComponent() (register, server, imports string) {
+func (s *CreateArgs) getComponent() (register, server, imports string) {
 	var registerComponent = make([]string, 0)
 	if s.WithMySQL {
 		registerComponent = append(registerComponent, "component.RegisterMySQL()")
@@ -73,7 +74,7 @@ func (s *Args) getComponent() (register, server, imports string) {
 }
 
 // createFile 递归拷贝模板,并且格式化创建 Go 创建文件
-func (s *Args) createFile(tplPath, filePath string) {
+func (s *CreateArgs) createFile(tplPath, filePath string) {
 	d, _ := FS.ReadDir(tplPath)
 	for _, item := range d {
 		createPath := filePath + "/" + item.Name()
@@ -104,7 +105,7 @@ func (s *Args) createFile(tplPath, filePath string) {
 }
 
 // skipCreateFile 是否跳过该文件的创建
-func (s *Args) skipCreateFile(path string) bool {
+func (s *CreateArgs) skipCreateFile(path string) bool {
 	if !s.WithMySQL && helper.InArray(path, []string{
 		currentPath + "/component/mysql.tpl",
 	}) {
@@ -124,7 +125,7 @@ func (s *Args) skipCreateFile(path string) bool {
 	if s.WithHTTPServer && !s.WithGRPCServer && helper.InArray(path, []string{
 		currentPath + "/gen",
 		currentPath + "/rpc",
-		currentPath + "/proto",
+		currentPath + "/protobuf",
 		currentPath + "/component/etcd.tpl",
 		currentPath + "/configs/common/etcd.toml",
 		currentPath + "/server.maintpl",
@@ -134,7 +135,7 @@ func (s *Args) skipCreateFile(path string) bool {
 	// HTTP 服务带上 GRPC Client
 	if s.WithHTTPServer && s.WithGRPCServer && helper.InArray(path, []string{
 		currentPath + "/gen",
-		currentPath + "/proto",
+		currentPath + "/protobuf",
 		currentPath + "/rpc/rpc.tpl",
 		currentPath + "/server.maintpl",
 	}) {
