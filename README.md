@@ -17,23 +17,26 @@ Go 1.16 以上
 
 ## 运行示例如下
 ```
-$ xctl create
-必填参数不能为空:  --with-name  --with-mod
+$ xctl.exe create
+必填参数不能为空:  --with-name  --with-mod--with-grpc-server--with-grpc-server
 你可以根据自己的需求创建一个项目,示例如下
 
 Usage:
    create [flags]
 
 Examples:
-xctl create --with-name myapp --with-mod github.com/xhyonline/myapp
+xctl create --with-name myapp --with-http-server --with-mod github.com/xhyonline/myapp
 
 Flags:
   -h, --help                help for create
       --with-githubAction   是否初始化 github action 集成
+      --with-grpc-server    二选一 必填项 是否是一个 GRPC 服务?
+      --with-http-server    二选一或全选(全选则附带grpc-server附带GRPC Client 说明文档 rpc 目录下) 必填项 是否是一个 HTTP 服务?
       --with-mod string     必填项 初始化 go mod 例如: github.com/myapp
       --with-mysql          是否使用 mysql 数据库
       --with-name string    必填项 应用名称,例如:myapp,
       --with-redis          是否使用 redis 缓存
+
 ```
 
 ## 使用示例
