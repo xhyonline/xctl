@@ -1,7 +1,7 @@
 package component
 
 import (
-	"github.com/xhyonline/myapp-http/configs"
+	"github.com/xhyonline/%goMod/configs"
 	"github.com/xhyonline/xutil/helper"
 	"github.com/xhyonline/xutil/logger"
 	"github.com/xhyonline/xutil/metrics"

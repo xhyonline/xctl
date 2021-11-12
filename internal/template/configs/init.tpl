@@ -16,9 +16,10 @@ var Env = "dev"
 var Name = "%appName"
 
 type Config struct {
-	MySQL *MySQL `toml:"mysql"`
-	Redis *Redis `toml:"redis"`
-	ETCD  *ETCD  `toml:"etcd"`
+	MySQL             *MySQL             `toml:"mysql"`
+	Redis             *Redis             `toml:"redis"`
+	ETCD              *ETCD              `toml:"etcd"`
+	PrometheusGateWay *PrometheusGateWay `toml:"prometheus_gate_way"`
 }
 
 type Redis struct {
