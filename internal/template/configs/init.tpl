@@ -36,6 +36,11 @@ type ETCD struct {
 	Port int    `toml:"port"`
 }
 
+type PrometheusGateWay struct {
+	Host string `toml:"host"`
+	Port string `toml:"port"`
+}
+
 type dbCommon struct {
 	Host        string `toml:"host"`
 	User        string `toml:"user"`
@@ -49,6 +54,7 @@ var Instance = &Config{
 	Redis: new(Redis),
 	MySQL: new(MySQL),
 	ETCD:  new(ETCD),
+	PrometheusGateWay: new(PrometheusGateWay),
 }
 
 type Option func() string
@@ -101,5 +107,11 @@ func WithRedis() Option {
 func WithETCD() Option {
 	return func() string {
 		return filePath + "etcd.toml"
+	}
+}
+
+func WithPrometheus() Option {
+	return func() string {
+		return filePath + "prometheus.toml"
 	}
 }

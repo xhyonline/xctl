@@ -147,6 +147,8 @@ func (s *CreateArgs) skipCreateFile(path string) bool {
 		currentPath + "/middleware",
 		currentPath + "/router",
 		currentPath + "/http.maintpl",
+		currentPath + "/component/metric.tpl",
+		currentPath + "/configs/common/prometheus.toml",
 	}) {
 		return true
 	}
