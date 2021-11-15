@@ -76,7 +76,7 @@ func Init(options ...Option) {
 	if exists {
 		Env = "product"
 		filePath = productConfigPath
-		logger.SetLoggerProduct("/tmp/log/go-micro/" + Name + ".log")
+		logger.SetLoggerProduct("/tmp/log/go-micro/" + Name + "/" + Name + ".log")
 	}
 	for _, v := range options {
 		load(v)

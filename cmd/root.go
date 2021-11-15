@@ -7,7 +7,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// 跟命令
+const version = "v0.1.2021111511"
+
+// rootCmd 根命令
 var rootCmd = &cobra.Command{
 	Short: "help",
 	Long:  `这是一份帮助手册,您可以查看命令`,
@@ -16,8 +18,18 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+// versionCmd 显示当前版本
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "version",
+	Long:  `example: xctl version`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("当前版本号:" + version)
+	},
+}
+
 func init() {
-	rootCmd.AddCommand(createCmd, protoCmd)
+	rootCmd.AddCommand(createCmd, versionCmd, protoCmd)
 }
 
 func Execute() {
