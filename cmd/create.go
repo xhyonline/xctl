@@ -17,7 +17,9 @@ func initArgs() {
 	createCmd.Flags().BoolVar(&args.WithGRPCServer, "with-grpc-server", false, "二选一 必填项 是否是一个 GRPC 服务?")
 	createCmd.Flags().BoolVar(&args.WithMySQL, "with-mysql", false, "是否使用 mysql 数据库")
 	createCmd.Flags().BoolVar(&args.WithRedis, "with-redis", false, "是否使用 redis 缓存")
-	createCmd.Flags().BoolVar(&args.WithGithubAction, "with-githubAction", false, "是否初始化 github action 集成")
+	createCmd.Flags().BoolVar(&args.WithGithubAction, "with-githubAction", false, "初始化 github action 集成。注:生成的 " +
+		"action.yml 文件中采用两种发布模式,你需要自行选取一种。第一种是在 github 上构建,并使用 rsync 进行发布打包后的二进制执行文件。第二种是使用 rsync 同步代码到自己的云服务器,并进行构建。" +
+		"由于 Github 自身网速很慢,你需要考量自己的项目适合哪一种模式")
 }
 
 var createCmd = &cobra.Command{

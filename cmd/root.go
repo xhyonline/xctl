@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const version = "v0.1.2021111511"
+const version = "v0.1.2021111715"
 
 // rootCmd 根命令
 var rootCmd = &cobra.Command{

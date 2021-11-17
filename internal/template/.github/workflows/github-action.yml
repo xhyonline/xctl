@@ -2,8 +2,6 @@ name: CI构建
 on:
   push:
     branches: [ main,master ]
-#  pull_request:
-#    branches: [ main ,master ] # merge到main分支时触发部署
 
 env:
   APP_NAME: x-http # 给 APP 起一个名字
